@@ -1662,9 +1662,6 @@ void VM_Version::get_processor_features() {
   if (FLAG_IS_DEFAULT(PrefetchScanIntervalInBytes)) {
     FLAG_SET_DEFAULT(PrefetchScanIntervalInBytes, 576);
   }
-  if (FLAG_IS_DEFAULT(PrefetchFieldsAhead)) {
-    FLAG_SET_DEFAULT(PrefetchFieldsAhead, 1);
-  }
 #endif
 
   if (FLAG_IS_DEFAULT(ContendedPaddingWidth) &&
@@ -1726,9 +1723,6 @@ void VM_Version::get_processor_features() {
     }
     if (PrefetchScanIntervalInBytes > 0) {
       log->print_cr("PrefetchScanIntervalInBytes %d", (int) PrefetchScanIntervalInBytes);
-    }
-    if (PrefetchFieldsAhead > 0) {
-      log->print_cr("PrefetchFieldsAhead %d", (int) PrefetchFieldsAhead);
     }
     if (ContendedPaddingWidth > 0) {
       log->print_cr("ContendedPaddingWidth %d", (int) ContendedPaddingWidth);
