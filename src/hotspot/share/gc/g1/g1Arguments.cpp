@@ -246,6 +246,24 @@ void G1Arguments::initialize() {
   if (max_parallel_refinement_threads > UINT_MAX / divisor) {
     vm_exit_during_initialization("Too large parallelism for remembered sets.");
   }
+
+  if (FLAG_IS_DEFAULT(G1RemSetScanChunksPerRegion)) {
+    // Limit the expected input values to current known possible values of the
+    // (log) region size. Adjust as necessary after testing if changing the permissible
+    // values for region size.
+    assert(HeapRegion::LogOfHRGrainBytes >= 20 && HeapRegion::LogOfHRGrainBytes <= 29,
+           "expected value in [20,29], but got %u", HeapRegion::LogOfHRGrainBytes);
+
+    // Return "optimal" number of chunks per region we want to use for claiming areas
+    // within a region to claim. Dependent on the region size as proxy for the heap
+    // size, we limit the total number of chunks to limit memory usage and maintenance
+    // effort of that table vs. granularity of distributing scanning work.
+    // Testing showed that 8 for 1M/2M region, 16 for 4M/8M regions, 32 for 16/32M regions,
+    // and so on seems to be such a good trade-off.
+    FLAG_SET_ERGO(G1RemSetScanChunksPerRegion, 1u << (HeapRegion::LogOfHRGrainBytes / 2 - 7));
+  } else if (G1RemSetScanChunksPerRegion >= HeapRegion::CardsPerRegion) {
+    vm_exit_during_initialization("G1RemSetScanChunksPerRegion must be less than cards per region.");
+  }
 }
 
 void G1Arguments::initialize_heap_flags_and_sizes() {

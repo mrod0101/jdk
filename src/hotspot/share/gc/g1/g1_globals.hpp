@@ -251,6 +251,11 @@
           "set container.")                                                 \
           range(1, 100)                                                     \
                                                                             \
+  product(uint, G1RemSetScanChunksPerRegion, 0,                              \
+          "Number of cards per region to for thread to claim when "         \
+          "scanning the remembered set. This is configured ergonomically "  \
+          "by default based on region size.")                               \
+                                                                            \
   develop(intx, G1MaxVerifyFailures, -1,                                    \
           "The maximum number of verification failures to print.  "         \
           "-1 means print all.")                                            \
