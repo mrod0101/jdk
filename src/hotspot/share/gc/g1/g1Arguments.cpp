@@ -159,7 +159,7 @@ void G1Arguments::initialize_card_set_configuration() {
                        G1RemSetHowlMaxNumBuckets, G1RemSetHowlNumBuckets);
     vm_exit_during_initialization(buf);
   }
-  
+
   if (FLAG_IS_DEFAULT(G1RemSetScanChunksPerRegion)) {
     // Limit the expected input values to current known possible values of the
     // (log) region size. Adjust as necessary after testing if changing the permissible
